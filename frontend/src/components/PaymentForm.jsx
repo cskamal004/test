@@ -5,22 +5,28 @@ const PaymentForm = () => {
   const [cardNumber, setCardNumber] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
   const [cvv, setCvv] = useState("");
+  const [amount, setAmount] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!cardNumber || !expiryDate || !cvv) {
+    if (!cardNumber || !expiryDate || !cvv || !amount) {
       setError("Please fill in all fields");
       setSuccess("");
       return;
     }
     try {
-      await processPayment({ cardNumber, expiryDate, cvv });
+      await processPayment({ 
+        amount: parseFloat(amount), 
+        paymentMethod: "credit_card", 
+        userId: "temp_user_id" // In a real app, this would come from authentication
+      });
       setSuccess("Payment processed successfully!");
       setCardNumber("");
       setExpiryDate("");
       setCvv("");
+      setAmount("");
       setError("");
     } catch (e) {
       setError(e.message || "Payment failed");
@@ -33,6 +39,18 @@ const PaymentForm = () => {
       <h3>Payment Details</h3>
       {error && <p style={{ color: "red" }}>{error}</p>}
       {success && <p style={{ color: "green" }}>{success}</p>}
+      <div>
+        <label>
+          Amount:
+          <input
+            type="number"
+            step="0.01"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="0.00"
+          />
+        </label>
+      </div>
       <div>
         <label>
           Card Number:

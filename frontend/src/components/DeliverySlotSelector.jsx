@@ -37,8 +37,8 @@ const DeliverySlotSelector = ({ onSlotSelect }) => {
           Choose a slot
         </option>
         {slots.map((slot) => (
-          <option key={slot.id} value={slot.id}>
-            {slot.timeRange}
+          <option key={slot._id} value={slot._id}>
+            {new Date(slot.date).toLocaleDateString()} - {slot.time}
           </option>
         ))}
       </select>

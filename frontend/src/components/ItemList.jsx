@@ -29,8 +29,8 @@ const ItemList = () => {
         <li>No items available.</li>
       ) : (
         items.map((item) => (
-          <li key={item.id}>
-            <strong>{item.name}</strong> - {item.price}
+          <li key={item._id}>
+            <strong>{item.name}</strong> - ${item.price} (Qty: {item.quantity})
           </li>
         ))
       )}
