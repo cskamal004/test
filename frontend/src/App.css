@@ -113,6 +113,31 @@ li {
   border-radius: 4px;
 }
 
+.features {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.features h2 {
+  color: #4CAF50;
+  margin-bottom: 1rem;
+}
+
+.features ul {
+  list-style: none;
+  padding: 0;
+}
+
+.features li {
+  padding: 0.5rem 0;
+  color: #333;
+  background: none;
+  border: none;
+  margin: 0;
+}
+
 /* Home page navigation */
 .home-nav ul {
   display: flex;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchDeliverySlots } from "../services/api";
 
-const DeliverySlotSelector = ({ onSlotSelect }) => {
+const DeliverySlotSelector = ({ onSlotSelect = () => {} }) => {
   const [slots, setSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState("");
   const [loading, setLoading] = useState(true);
@@ -23,7 +23,9 @@ const DeliverySlotSelector = ({ onSlotSelect }) => {
 
   const handleSlotChange = (event) => {
     setSelectedSlot(event.target.value);
-    onSlotSelect(event.target.value);
+    if (onSlotSelect) {
+      onSlotSelect(event.target.value);
+    }
   };
 
   if (loading) return <p>Loading delivery slots...</p>;
