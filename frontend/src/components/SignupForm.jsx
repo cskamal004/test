@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { registerUser } from "../services/api";
 
-const SignupForm = () => {
+const SignupForm = ({ onSignupSuccess }) => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -9,6 +9,7 @@ const SignupForm = () => {
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,17 +23,26 @@ const SignupForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (!formData.username || !formData.email || !formData.password) {
       setError("All fields are required");
       setSuccess("");
+      setLoading(false);
       return;
     }
     try {
-      await registerUser(formData);
+      const userData = await registerUser(formData);
       setSuccess("User registered successfully!");
       setFormData({ username: "", email: "", password: "" });
+      setTimeout(() => {
+        if (onSignupSuccess) {
+          onSignupSuccess(userData);
+        }
+      }, 1000);
     } catch (e) {
       setError(e.message || "Registration failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -77,7 +87,9 @@ const SignupForm = () => {
           />
         </label>
       </div>
-      <button type="submit">Sign Up</button>
+      <button type="submit" disabled={loading}>
+        {loading ? 'Signing Up...' : 'Sign Up'}
+      </button>
     </form>
   );
 };

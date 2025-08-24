@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { fetchDeliverySlots } from "../services/api";
 
-const DeliverySlotSelector = ({ onSlotSelect = () => {} }) => {
+const DeliverySlotSelector = ({ onSlotSelected, selectedSlot }) => {
   const [slots, setSlots] = useState([]);
-  const [selectedSlot, setSelectedSlot] = useState("");
+  const [currentSelectedSlot, setCurrentSelectedSlot] = useState(selectedSlot || "");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -22,28 +22,62 @@ const DeliverySlotSelector = ({ onSlotSelect = () => {} }) => {
   }, []);
 
   const handleSlotChange = (event) => {
-    setSelectedSlot(event.target.value);
-    if (onSlotSelect) {
-      onSlotSelect(event.target.value);
+    const slotId = event.target.value;
+    setCurrentSelectedSlot(slotId);
+    const selectedSlotData = slots.find(slot => slot._id === slotId);
+    if (onSlotSelected && selectedSlotData) {
+      onSlotSelected(selectedSlotData);
     }
   };
 
-  if (loading) return <p>Loading delivery slots...</p>;
-  if (error) return <p>{error}</p>;
+  const handleContinue = () => {
+    if (!currentSelectedSlot) {
+      alert("Please select a delivery slot to continue.");
+      return;
+    }
+    const selectedSlotData = slots.find(slot => slot._id === currentSelectedSlot);
+    if (onSlotSelected && selectedSlotData) {
+      onSlotSelected(selectedSlotData);
+    }
+  };
+
+  if (loading) return <div className="loading">Loading delivery slots...</div>;
+  if (error) return <div className="error">Error: {error}</div>;
 
   return (
-    <div>
-      <label htmlFor="slot-select">Select Delivery Slot:</label>
-      <select id="slot-select" value={selectedSlot} onChange={handleSlotChange}>
-        <option value="" disabled>
-          Choose a slot
-        </option>
-        {slots.map((slot) => (
-          <option key={slot._id} value={slot._id}>
-            {new Date(slot.date).toLocaleDateString()} - {slot.time}
+    <div className="delivery-slot-container">
+      <div className="slot-selection">
+        <label htmlFor="slot-select">Select Delivery Slot:</label>
+        <select 
+          id="slot-select" 
+          value={currentSelectedSlot} 
+          onChange={handleSlotChange}
+          className="slot-select"
+        >
+          <option value="" disabled>
+            Choose a slot
           </option>
-        ))}
-      </select>
+          {slots.map((slot) => (
+            <option key={slot._id} value={slot._id}>
+              {new Date(slot.date).toLocaleDateString()} - {slot.time}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {currentSelectedSlot && (
+        <div className="selected-slot-info">
+          <h4>Selected Delivery Slot:</h4>
+          <p>
+            {slots.find(slot => slot._id === currentSelectedSlot) && 
+             `${new Date(slots.find(slot => slot._id === currentSelectedSlot).date).toLocaleDateString()} - ${slots.find(slot => slot._id === currentSelectedSlot).time}`
+            }
+          </p>
+          <button className="continue-btn" onClick={handleContinue}>
+            Continue to Payment
+          </button>
+        </div>
+      )}
     </div>
   );
 };
