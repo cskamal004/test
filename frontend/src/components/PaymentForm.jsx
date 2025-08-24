@@ -20,7 +20,7 @@ const PaymentForm = () => {
       await processPayment({ 
         amount: parseFloat(amount), 
         paymentMethod: "credit_card", 
-        userId: "temp_user_id" // In a real app, this would come from authentication
+        userId: "507f1f77bcf86cd799439011" // Using a valid MongoDB ObjectId format
       });
       setSuccess("Payment processed successfully!");
       setCardNumber("");

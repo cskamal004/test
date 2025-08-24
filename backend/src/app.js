@@ -18,6 +18,8 @@ mongoose
   .connect("mongodb://localhost:27017/grocery-delivery", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
   })
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));

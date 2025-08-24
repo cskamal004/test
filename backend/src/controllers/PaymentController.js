@@ -19,13 +19,18 @@ class PaymentController {
       );
 
       if (paymentResult.success) {
-        // Uncomment to save to DB if Payment model implemented accordingly
-        // const payment = new this.paymentModel({ amount, userId, paymentMethod, status: 'completed' });
-        // await payment.save();
+        // Save payment to database
+        const payment = new this.paymentModel({ 
+          amount, 
+          userId, 
+          paymentMethod, 
+          status: 'completed' 
+        });
+        await payment.save();
 
         return res.status(200).json({
           message: "Payment processed successfully",
-          paymentId: paymentResult.paymentId,
+          paymentId: payment._id,
         });
       } else {
         return res.status(500).json({ message: "Payment processing failed" });

@@ -18,10 +18,15 @@ const paymentController = new PaymentController(PaymentModel);
 
 router.post("/signup", userController.register);
 router.post("/login", userController.login);
+router.get("/users/:id", userController.getUser);
 
 router.get("/items", itemController.getAllItems);
+router.post("/items", itemController.addItem);
+router.put("/items/:id", itemController.updateItem);
+router.delete("/items/:id", itemController.deleteItem);
 
 router.get("/delivery-slots", deliveryController.getAvailableSlots);
+router.post("/delivery-slots/book", deliveryController.bookSlot);
 
 router.post("/payment", paymentController.processPayment);
 
